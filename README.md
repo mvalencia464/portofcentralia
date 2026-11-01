@@ -29,7 +29,7 @@ npm run dev
 
 All images live in `public/images/`, each with WebP copies for `srcset`.
 
-- **The Port's own:** both logo versions and the Centralia aerial in the hero, from portofcentralia.com. The hero is
+- **The Port's own:** the favicon, both logo versions, and the Centralia aerial in the hero, from portofcentralia.com. The hero is
   preloaded. The Port's site only has the aerial at 1200px, so a larger original would sharpen it on big screens.
 - **Representative stand-ins:** the park cards, rail panel, and community card use public domain or CC0 photos from
   Wikimedia Commons. Each one shows a small "Representative photo" tag, and the footer credits them. Swap in the

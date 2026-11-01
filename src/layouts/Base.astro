@@ -52,7 +52,9 @@ const schema = {
     <!-- Concept demo: keep it out of search results. -->
     <meta name="robots" content="noindex, nofollow" />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     {preloadSrcset && <link rel="preload" as="image" type="image/webp" imagesrcset={preloadSrcset} imagesizes="(min-width: 1000px) 50vw, 100vw" fetchpriority="high" />}
     <meta name="theme-color" content="#06203b" />
     <meta property="og:type" content="website" />
