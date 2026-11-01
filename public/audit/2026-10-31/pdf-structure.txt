@@ -1,0 +1,16 @@
+PDF structure check, portofcentralia.com, October 31, 2026
+Method: each PDF downloaded and scanned for a tag tree (StructTreeRoot), embedded fonts, and images.
+A PDF with no fonts and only images is a scan: it has no text a screen reader can read.
+
+https://portofcentralia.com/wp-content/uploads/2022/12/2026-Small-Works-Roster-Application.pdf
+  tag tree: yes | embedded fonts: 8 | images: 0 | result: Tagged, has text
+
+https://portofcentralia.com/wp-content/uploads/2022/12/October-21-2026-Agenda.pdf
+  tag tree: no | embedded fonts: 0 | images: 2 | result: Scanned image, no text, untagged
+
+https://portofcentralia.com/wp-content/uploads/2022/12/October-7-2026-Minutes.pdf
+  tag tree: no | embedded fonts: 0 | images: 6 | result: Scanned image, no text, untagged
+
+https://portofcentralia.com/wp-content/uploads/2022/11/PoC_BondOverview.pdf
+  tag tree: no | embedded fonts: 0 | images: 0 | result: Untagged, no embedded text fonts (text drawn as shapes)
+

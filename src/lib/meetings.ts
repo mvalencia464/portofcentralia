@@ -15,7 +15,11 @@ export const formatDate = (iso: string, style: 'long' | 'short' | 'weekday' = 'l
   });
 
 export const meetingTitle = (m: Meeting) =>
-  m.type === 'Special' ? 'Special Commission Meeting' : m.type === 'Regular' ? 'Regular Commission Meeting' : `${m.type} Commission Meeting`;
+  m.type === 'Special'
+    ? 'Special Commission Meeting'
+    : m.type === 'Regular + Public Hearing'
+      ? 'Regular Meeting & Public Hearing'
+      : 'Regular Commission Meeting';
 
 // The site is static, so "today" is the build date. A daily Cloudflare Pages
 // deploy hook keeps "next meeting" current.
@@ -26,4 +30,4 @@ export async function getMeetings(today = new Date().toISOString().slice(0, 10))
   return { all, upcoming, past };
 }
 
-export const docOf = (m: Meeting, kind: 'Agenda' | 'Minutes') => m.documents.find((d) => d.kind === kind);
+export const docOf = (m: Meeting, kind: 'Agenda' | 'Minutes' | 'Notice') => m.documents.find((d) => d.kind === kind);

@@ -10,10 +10,17 @@
   {
     "id": "2026-11-18",
     "date": "2026-11-18",
-    "type": "Regular",
-    "documents": [],
+    "type": "Regular + Public Hearing",
+    "documents": [
+      {
+        "kind": "Notice",
+        "label": "Notice of public hearing",
+        "href": "https://portofcentralia.com/wp-content/uploads/2022/12/Notice-of-Public-Hearing-11-18-26-2027-Final-Budget.pdf"
+      }
+    ],
     "time": "3:00 pm",
-    "location": "Port of Centralia Administration Office"
+    "location": "Port of Centralia Administration Office",
+    "hearing": "2027 final budget"
   },
   {
     "id": "2026-11-04",
@@ -387,6 +394,11 @@
         "kind": "Minutes",
         "label": "Public Hearing Minutes",
         "href": "https://portofcentralia.com/wp-content/uploads/2022/12/March-18-2026-Reg-PH-Minutes.pdf"
+      },
+      {
+        "kind": "Notice",
+        "label": "Notice of public hearing",
+        "href": "https://portofcentralia.com/wp-content/uploads/2022/12/Notice-of-Public-Hearing-3-18-26.pdf"
       }
     ]
   },

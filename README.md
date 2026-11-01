@@ -1,6 +1,8 @@
 # Port of Centralia homepage concept
 
-A concept demo by Stoke Leads for the Port of Centralia RFP (due Nov 13, 2026). It is the homepage, a meetings page, and a readiness plan for the proposal (`/readiness-plan`, not linked from the menu),
+A concept demo by Stoke Leads for the Port of Centralia RFP (due Nov 13, 2026). It has a homepage, a meetings page (with remote attendance details), an accessibility statement, a site map, and a
+readiness plan for the proposal (`/readiness-plan`, not linked from the menu). Links to pages outside the demo go to
+the matching page on portofcentralia.com. It is
 built with Astro as a static site for Cloudflare Pages. A banner on every page says this is not the Port's official site,
 and every page is `noindex`.
 
@@ -27,39 +29,31 @@ npm run dev
 
 ## Images
 
-All images live in `public/images/`, each with WebP copies for `srcset`.
+All images live in `public/images/` and ship with the site, so the Port owns them along with everything else (the RFP
+requires the Port to keep ownership and control of its content). Each photo has AVIF and WebP copies; the hero uses
+WebP only because AVIF wasn't smaller for that image.
 
-- **The Port's own:** the favicon, both logo versions, and the Centralia aerial in the hero, from portofcentralia.com. The hero is
-  preloaded. The Port's site only has the aerial at 1200px, so a larger original would sharpen it on big screens.
-- **Representative stand-ins:** the park cards, rail panel, and community card use public domain or CC0 photos from
-  Wikimedia Commons. Each one shows a small "Representative photo" tag, and the footer credits them. Swap in the
-  Port's own photos before launch.
+| Key         | File                     | Source (license)                                                          |
+| ----------- | ------------------------ | ------------------------------------------------------------------------- |
+| `hero`      | `hero-centralia-aerial`  | Aerial of Centralia, portofcentralia.com                                  |
+| `logo`      | `logo-blue.png`, `logo-white.png` | portofcentralia.com                                              |
+| `rail`      | `rail-centralia-depot`   | Freight train at Centralia Union Depot, Joe Mabel (CC BY-SA 3.0)          |
+| `community` | `rainier-from-centralia` | Mount Rainier from Centralia, Chris Light (CC BY-SA 4.0)                  |
+| `park1`     | `park-1-aerial`          | Stand-in: distribution center, Wikideas1 (CC0)                            |
+| `park2`     | `park-2-warehouse`       | Stand-in: warehouse, DimiTalen (CC0)                                      |
+| `park3`     | `park-3-warehouse`       | Stand-in: business park street, DimiTalen (CC0)                           |
 
-| Key         | File                    | Source (license)                                                                                   |
-| ----------- | ----------------------- | -------------------------------------------------------------------------------------------------- |
-| `hero`      | `hero-centralia-aerial` | portofcentralia.com                                                                                |
-| `logo`      | `logo-blue.png`, `logo-white.png` | portofcentralia.com                                                                      |
-| `park1`     | `park-1-aerial`         | Distribution center aerial by Wikideas1 (CC0)                                                      |
-| `park2`     | `park-2-warehouse`      | Warehouse by DimiTalen (CC0)                                                                       |
-| `park3`     | `park-3-warehouse`      | Business park street by DimiTalen (CC0)                                                            |
-| `rail`      | `rail-service`          | BNSF freight train by G Pei (public domain)                                                        |
-| `community` | `centralia-rainier`     | Mount Rainier from Inspiration Point, National Park Service (public domain)                        |
-
-Full source links and alt text are in `src/data/images.ts`.
-
-To serve images from Cloudflare R2, upload the same file names and set `PUBLIC_IMAGE_BASE` to the bucket's public URL.
-`PUBLIC_IMAGES_READY` lists which keys to load (default: all). A key that's left out falls back to a drawn placeholder.
-See `.env.example`.
+The park photos are stand-ins: no free-license photos of the Port's parks exist. They carry a "Representative photo"
+tag until the Port supplies its own. All photos are credited in the footer, which also meets the CC BY-SA terms.
 
 No text sits on a photo. The hero and community card put their text on solid navy, and the photos are cropped
-beside or above it (diagonal and curved edges via `clip-path`), so any photo works without overlays. Gradients, film
-grain, and angled light planes are only used on solid-colour areas, never on images.
+beside or above it (diagonal and curved edges via `clip-path`), so any photo works without overlays.
 
 ## Content
 
 | What | Where | Source |
 | ---- | ----- | ------ |
-| Meetings (2026 agendas, minutes, videos, upcoming dates) | `src/content/meetings.json` | portofcentralia.com agendas page and calendar, checked Oct 31, 2026 |
+| Meetings (2026 agendas, minutes, videos, hearing notices, upcoming dates) | `src/content/meetings.json` | portofcentralia.com agendas page, notices page and calendar, checked Oct 31, 2026 |
 | News | `src/content/news.json` | portofcentralia.com press releases |
 | Parks | `src/content/parks.json` | portofcentralia.com homepage |
 | Contact, hours, infrastructure, incentives, USDA statement | `src/data/site.ts` | portofcentralia.com homepage and footer |
@@ -71,6 +65,12 @@ The documents (agendas, minutes, Master Plan, bond overview, roster forms) still
 portofcentralia.com. The tagline "Building a stronger, more prosperous Centralia" is our copy, not the Port's.
 
 Links to pages outside the demo (About, Industrial Parks, News, and so on) go to a 404 page that explains the demo's scope.
+
+## Audit evidence
+
+The readiness plan's numbers about the current site come from Lighthouse 12 (mobile) runs on Oct 31, 2026. The HTML
+reports and a PDF structure check are published at `/audit/2026-10-31/`; the raw JSON is in `audit/2026-10-31/`.
+Accessibility counts reproduce exactly between runs; load times vary by about a tenth of a second.
 
 ## Accessibility and performance (Oct 31, 2026)
 

@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
-import { nav, OFFICIAL_SITE } from '../data/site';
+import { nav, official, OFFICIAL_SITE } from '../data/site';
 ---
 
 <a class="skip-link" href="#main">Skip to main content</a>
@@ -15,9 +15,9 @@ import { nav, OFFICIAL_SITE } from '../data/site';
   </div>
   <div class="utility on-dark">
     <div class="container utility__inner">
-      <form class="search" role="search" action="/search" method="get">
+      <form class="search" role="search" action={official.search} method="get">
         <label for="site-search" class="sr-only">Search the Port website</label>
-        <input id="site-search" name="q" type="search" placeholder="Search the Port" autocomplete="off" />
+        <input id="site-search" name="s" type="search" placeholder="Search the Port" autocomplete="off" />
         <button type="submit">
           <Icon name="search" />
           <span class="sr-only">Search</span>
@@ -32,9 +32,8 @@ import { nav, OFFICIAL_SITE } from '../data/site';
 
   <div class="mainbar">
     <div class="container mainbar__inner">
-      <a class="brand" href="/">
+      <a class="brand" href="/" aria-label="Port of Centralia home">
         <Logo />
-        <span class="sr-only">, home</span>
       </a>
 
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">

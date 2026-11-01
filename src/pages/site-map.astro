@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import { nav, documents } from '../data/site';
+
+const isExternal = (href: string) => href.startsWith('http');
+---
+
+<Base title="Site map | Port of Centralia" description="Every page and key document on the Port of Centralia website.">
+  <div class="page-head on-dark">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li><span aria-current="page">Site map</span></li>
+        </ol>
+      </nav>
+      <h1>Site map</h1>
+      <p>Pages marked "portofcentralia.com" open the Port's current website.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container site-map">
+      <section aria-labelledby="sm-main">
+        <h2 id="sm-main">Main pages</h2>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/meetings">Meetings, agendas &amp; minutes</a></li>
+          <li><a href="/accessibility">Accessibility statement</a></li>
+          <li><a href="/#contact">Contact the Port</a></li>
+        </ul>
+      </section>
+      {
+        nav
+          .filter((entry) => 'items' in entry)
+          .map((entry, i) => (
+            <section aria-labelledby={`sm-${i}`}>
+              <h2 id={`sm-${i}`}>{entry.label}</h2>
+              <ul>
+                {entry.items!.map((item) => (
+                  <li>
+                    <a href={item.href}>{item.label}</a>
+                    {isExternal(item.href) && !item.href.endsWith('.pdf') && <span class="site-map__ext"> portofcentralia.com</span>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+      }
+      <section aria-labelledby="sm-docs">
+        <h2 id="sm-docs">Key documents</h2>
+        <ul>
+          <li><a href={documents.masterPlan}>2023 Master Plan (PDF)</a></li>
+          <li><a href={documents.bondOverview}>Bond overview (PDF)</a></li>
+          <li><a href={documents.smallWorksApplication}>2026 Small Works Roster application (PDF)</a></li>
+          <li><a href={documents.aeForm330}>A&amp;E roster: Standard Form 330 (PDF)</a></li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</Base>

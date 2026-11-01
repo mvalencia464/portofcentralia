@@ -1,7 +1,7 @@
 ---
 import Icon from './Icon.astro';
 import Logo from './Logo.astro';
-import { contact, social, usdaStatement, documents } from '../data/site';
+import { contact, social, usdaStatement, documents, official } from '../data/site';
 import { stockCredits } from '../data/images';
 
 const year = new Date().getFullYear();
@@ -51,9 +51,8 @@ const treesFront = treeline(42, 34, 70, 38, 80);
   <div class="container">
     <div class="footer__top">
       <div class="footer__brand">
-        <a class="brand" href="/">
+        <a class="brand" href="/" aria-label="Port of Centralia home">
           <Logo tone="light" />
-          <span class="sr-only">, home</span>
         </a>
         <p>Three industrial parks on the I-5 corridor in Lewis County, Washington.</p>
       </div>
@@ -61,12 +60,12 @@ const treesFront = treeline(42, 34, 70, 38, 80);
       <nav aria-labelledby="footer-links-heading">
         <h2 id="footer-links-heading">Quick links</h2>
         <ul class="footer__links">
-          <li><a href="/industrial-parks">Industrial parks</a></li>
+          <li><a href={official.industrialParks}>Industrial parks</a></li>
           <li><a href="/meetings">Meeting agendas &amp; minutes</a></li>
-          <li><a href="/notices">Public notices</a></li>
+          <li><a href={official.notices}>Public notices</a></li>
           <li><a href="/#rosters">Contractor rosters</a></li>
           <li><a href={documents.masterPlan}>Master Plan (PDF)</a></li>
-          <li><a href="/news">News &amp; press releases</a></li>
+          <li><a href={official.news}>News &amp; press releases</a></li>
         </ul>
       </nav>
 
@@ -135,11 +134,11 @@ const treesFront = treeline(42, 34, 70, 38, 80);
     {
       stockCredits.length > 0 && (
         <p class="footer__credits">
-          Representative photos (public domain or CC0, via Wikimedia Commons):{' '}
+          Photos via Wikimedia Commons:{' '}
           {stockCredits.map((c, i) => (
             <>
               {i > 0 && '; '}
-              <a href={c.source}>{c.label}</a> by {c.author}
+              <a href={c.source}>{c.label}</a> by {c.author} ({c.license})
             </>
           ))}
           .
@@ -151,8 +150,8 @@ const treesFront = treeline(42, 34, 70, 38, 80);
       <p>&copy; {year} Port of Centralia. Concept demo by Stoke Leads.</p>
       <ul>
         <li><a href="/accessibility">Accessibility</a></li>
-        <li><a href="/privacy">Privacy policy</a></li>
-        <li><a href="/sitemap">Site map</a></li>
+        <li><a href={official.privacy}>Privacy policy</a></li>
+        <li><a href="/site-map">Site map</a></li>
       </ul>
     </div>
   </div>

@@ -11,10 +11,12 @@ const meetings = defineCollection({
     type: z.string(),
     time: z.string().optional(),
     location: z.string().optional(),
+    /** Topic of a public hearing held at this meeting */
+    hearing: z.string().optional(),
     video: z.string().url().optional(),
     documents: z.array(
       z.object({
-        kind: z.enum(['Agenda', 'Minutes']),
+        kind: z.enum(['Agenda', 'Minutes', 'Notice']),
         label: z.string(),
         href: z.string().url(),
       }),

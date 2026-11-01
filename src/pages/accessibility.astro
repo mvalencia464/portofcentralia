@@ -1,0 +1,68 @@
+---
+import Base from '../layouts/Base.astro';
+import { contact } from '../data/site';
+
+const reportHref = `mailto:${contact.email}?subject=${encodeURIComponent('Website accessibility problem')}`;
+const reviewed = 'October 31, 2026';
+---
+
+<Base
+  title="Accessibility statement | Port of Centralia"
+  description="The Port of Centralia's commitment to an accessible website, the standard it follows, known limitations, and how to report a barrier."
+>
+  <div class="page-head on-dark">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li><span aria-current="page">Accessibility</span></li>
+        </ol>
+      </nav>
+      <h1>Accessibility statement</h1>
+      <p>Everyone should be able to find meetings, documents, and Port services online, whatever device or assistive technology they use.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container prose">
+      <h2>Our standard</h2>
+      <p>
+        This website is built to meet the Web Content Accessibility Guidelines (WCAG) 2.1, Level AA, the standard
+        required of state and local governments under Title II of the Americans with Disabilities Act.
+      </p>
+
+      <h2>How we test</h2>
+      <ul>
+        <li>Automated checks with axe and Lighthouse on every page, every time the site is updated.</li>
+        <li>Keyboard-only testing of menus, links, and forms.</li>
+        <li>Screen reader testing with NVDA (Windows) and VoiceOver (Mac and iPhone).</li>
+        <li>Layout checks at 320 pixels wide and at 200% zoom.</li>
+      </ul>
+
+      <h2>Known limitations</h2>
+      <p>We are working on these and will update this page as they are fixed:</p>
+      <ul>
+        <li>
+          Older meeting agendas and minutes were posted as scanned PDFs, which screen readers cannot read. We are
+          publishing accessible HTML or tagged PDF versions, newest first. Any older document is available in an
+          accessible format on request.
+        </li>
+        <li>Meeting video captions are being reviewed for accuracy.</li>
+        <li>Some links go to pages and documents on sites the Port does not control, such as YouTube and Webex.</li>
+      </ul>
+
+      <h2 id="report">Report a problem or request a format</h2>
+      <p>
+        If something on this site is hard to use, or you need a document in another format, contact us. Tell us the
+        page or document and what you need. We will help you get the information.
+      </p>
+      <ul class="contact-points">
+        <li><strong>Email:</strong> <a href={reportHref}>{contact.email}</a></li>
+        <li><strong>Phone:</strong> <a href={contact.phoneHref}>{contact.phone}</a> ({contact.hours})</li>
+        <li><strong>In person or by mail:</strong> {contact.street}, {contact.city}, {contact.region} {contact.postalCode}</li>
+      </ul>
+
+      <p class="sources">This statement was last reviewed on {reviewed}.</p>
+    </div>
+  </div>
+</Base>

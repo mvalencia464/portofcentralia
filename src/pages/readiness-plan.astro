@@ -12,97 +12,132 @@ const statusLabel: Record<Status, string> = {
   phase2: 'After launch',
 };
 
-const groups: { title: string; rows: { need: string; today: string; fix: string; status: Status }[] }[] = [
+// `ref` points to the RFP section or WCAG 2.1 success criterion behind each row.
+const groups: { title: string; rows: { need: string; ref: string; today: string; fix: string; status: Status }[] }[] = [
   {
     title: 'Accessibility: ADA Title II (WCAG 2.1 AA)',
     rows: [
       {
         need: 'Readable text contrast',
+        ref: 'WCAG 1.4.3',
         today: '71 contrast failures across the homepage and agendas page',
         fix: 'Every color pair tested to 4.5:1 or better, text never placed on photos',
         status: 'done',
       },
       {
         need: 'Every button and link has a name',
+        ref: 'WCAG 4.1.2, 2.4.4',
         today: '89 unlabeled buttons and 11 unlabeled links',
         fix: 'Semantic HTML with visible, descriptive labels',
         status: 'done',
       },
       {
         need: 'Logical page structure',
+        ref: 'WCAG 1.3.1, 2.4.6',
         today: 'Heading levels skip on the homepage',
         fix: 'One H1 per page, ordered headings, landmarks, skip link',
         status: 'done',
       },
       {
         need: 'Keyboard and screen reader access',
+        ref: 'WCAG 2.1.1, 2.4.7',
         today: 'Relies on an add-on accessibility toolbar',
-        fix: 'Built-in access: keyboard menus, focus rings, no overlay. Manual NVDA and VoiceOver pass',
+        fix: 'Built-in access: keyboard menus, focus rings, no overlay. Manual NVDA and VoiceOver pass before launch',
         status: 'phase1',
       },
       {
-        need: 'Accessible documents',
+        need: 'Accessible agendas, minutes and reports',
+        ref: 'RFP §2 ADA Accessibility',
         today: 'Agendas and minutes are scanned images with no text or tags. Bond overview is untagged',
         fix: 'An HTML version of every agenda and minutes, plus tagged PDFs, for current and new documents',
         status: 'phase1',
       },
       {
-        need: 'Captioned meeting video',
+        need: 'A way to report a barrier',
+        ref: 'Title II good practice',
+        today: 'No accessibility statement or contact in the footer',
+        fix: 'Accessibility statement, plus email and phone reporting on every page',
+        status: 'done',
+      },
+    ],
+  },
+  {
+    title: 'Meetings and recordings',
+    rows: [
+      {
+        need: 'Accurate captions on meeting videos',
+        ref: 'RFP §2 Meeting Videos · WCAG 1.2.2',
         today: 'Recordings on YouTube; captions not reviewed',
-        fix: 'Reviewed captions and a transcript link for each meeting',
+        fix: 'We edit each recording and publish it with reviewed captions, on a set turnaround',
         status: 'phase1',
       },
       {
-        need: 'A way to report a barrier',
-        today: 'No accessibility statement or contact in the footer',
-        fix: 'Statement plus email and phone reporting on every page',
-        status: 'done',
+        need: 'Text alternative for audio-only recordings',
+        ref: 'RFP §2 Meeting Videos · WCAG 1.2.1',
+        today: 'Audio recordings section has no files posted',
+        fix: 'Any audio-only recording is published with a transcript',
+        status: 'phase1',
       },
-    ],
-  },
-  {
-    title: 'Public records and transparency',
-    rows: [
       {
-        need: 'Meetings easy to follow',
+        need: 'Recordings linked to agendas and minutes',
+        ref: 'RFP §2 Meeting Videos',
         today: 'Agendas, minutes and videos sit in three separate lists',
-        fix: 'One row per meeting with agenda, minutes and video together',
+        fix: 'One row per meeting with agenda, minutes, video and any hearing notice together',
         status: 'done',
       },
       {
-        need: 'Next meeting always current',
-        today: 'Shown only inside a calendar widget',
-        fix: 'Next meeting on the homepage, refreshed automatically every day',
+        need: 'Easy to attend and find the next meeting',
+        ref: 'Public access',
+        today: 'Next meeting shown only inside a calendar widget',
+        fix: 'Next meeting on the homepage, refreshed daily; in-person, Webex and phone details on the meetings page',
         status: 'done',
       },
     ],
   },
   {
-    title: 'Performance, upkeep and security',
+    title: 'Ownership, upkeep and support',
     rows: [
+      {
+        need: 'Port owns its site, content, domain and accounts',
+        ref: 'RFP §2 Design and Development',
+        today: 'Footer privacy link points to an agency domain that no longer resolves',
+        fix: 'Code, hosting account, domain and images all held in the Port\'s name. No lock-in',
+        status: 'phase1',
+      },
+      {
+        need: 'Publishing handled for the Port',
+        ref: 'RFP §2 Ongoing Management',
+        today: 'Staff upload documents by hand in a page-builder editor',
+        fix: 'We publish agendas, minutes, notices and recordings. Staff can also email a document to publish it, with an automatic accessibility check',
+        status: 'phase1',
+      },
       {
         need: 'Fast on phones',
-        today: 'Main content loads in 10.0 s on mobile (homepage), 1.4 MB page',
-        fix: 'Static pages on Cloudflare: 1.6 s, about 250 KB',
+        ref: 'RFP §2 Mobile-friendly',
+        today: 'Main content takes about 10 s to load on mobile (homepage); 1.4 MB page',
+        fix: 'Static pages on Cloudflare: about 1.6 s and 250 KB',
         status: 'done',
       },
       {
-        need: 'Easy updates for staff',
-        today: 'Page-builder editor; documents uploaded by hand',
-        fix: 'Email a document to publish it, with an automatic accessibility check and approval by reply',
-        status: 'phase2',
-      },
-      {
-        need: 'Contractor roster sign-up',
-        today: 'Download, fill and return a PDF',
-        fix: 'Accessible online application form',
-        status: 'phase2',
-      },
-      {
-        need: 'Low-risk hosting',
+        need: 'Security, backups and maintenance',
+        ref: 'RFP §2 Ongoing Management',
         today: 'Plugins and server to keep patched',
-        fix: 'No server or plugins to patch, HTTPS everywhere',
+        fix: 'No server or plugins to patch. Every change versioned and reversible. HTTPS everywhere',
         status: 'done',
+      },
+      {
+        need: 'Staff training with written instructions',
+        ref: 'RFP §2 Staff Training',
+        today: '—',
+        fix: 'Hands-on training plus a short written guide for routine updates',
+        status: 'phase1',
+      },
+      {
+        need: 'Accessible online forms',
+        ref: 'RFP §2 ADA Accessibility',
+        today: 'Contractor roster is a download-and-return PDF',
+        fix: 'Accessible online roster application',
+        status: 'phase2',
       },
     ],
   },
@@ -120,7 +155,7 @@ const total = groups.reduce((n, g) => n + g.rows.length, 0);
 >
   <div class="page-head on-dark">
     <div class="container">
-      <p class="eyebrow">Stoke Leads · Port of Centralia RFP</p>
+      <p class="eyebrow">Stoke Leads · Response to the Port's Website RFP</p>
       <h1>Website readiness plan</h1>
       <p>What the Port's website must do, where it stands today, and how we close each gap well before the federal deadline.</p>
     </div>
@@ -132,7 +167,7 @@ const total = groups.reduce((n, g) => n + g.rows.length, 0);
       <ul class="stat-cards">
         <li>
           <p class="stat-cards__value">Apr 26, 2028</p>
-          <p class="stat-cards__label">ADA Title II compliance date for special districts such as the Port (WCAG 2.1 AA)</p>
+          <p class="stat-cards__label">ADA Title II compliance date for the Port, as set in the RFP and the DOJ rule (WCAG 2.1 AA)</p>
         </li>
         <li>
           <p class="stat-cards__value">89 <span>/</span> 78</p>
@@ -171,7 +206,10 @@ const total = groups.reduce((n, g) => n + g.rows.length, 0);
             <tbody>
               {group.rows.map((row) => (
                 <tr>
-                  <th scope="row">{row.need}</th>
+                  <th scope="row">
+                    {row.need}
+                    <span class="checklist__ref">{row.ref}</span>
+                  </th>
                   <td data-label="Today">{row.today}</td>
                   <td data-label="How we fix it">{row.fix}</td>
                   <td data-label="Status">
@@ -197,12 +235,12 @@ const total = groups.reduce((n, g) => n + g.rows.length, 0);
         <li>
           <p class="phases__step">1 · Launch</p>
           <h3>Accessible site, live</h3>
-          <p>Full site on this foundation. Current agendas, minutes and key documents rebuilt as HTML and tagged PDFs. Manual screen reader and keyboard audit, report delivered.</p>
+          <p>Full site on this foundation, owned by the Port. Current agendas, minutes and key documents rebuilt as HTML and tagged PDFs. Manual screen reader and keyboard audit. Staff training.</p>
         </li>
         <li>
           <p class="phases__step">2 · Simplify</p>
-          <h3>Updates without a web person</h3>
-          <p>Email-to-publish for agendas and notices with an automatic accessibility check. Online roster application. Staff training.</p>
+          <h3>We handle the publishing</h3>
+          <p>Agendas, minutes, notices and captioned recordings published for the Port. Optional email-to-publish for staff. Online roster application.</p>
         </li>
         <li>
           <p class="phases__step">3 · Sustain</p>
@@ -230,10 +268,13 @@ const total = groups.reduce((n, g) => n + g.rows.length, 0);
     </div>
     <div class="container">
       <p class="sources">
-        Sources: findings measured Oct 31, 2026 with Lighthouse 12 (mobile) on portofcentralia.com and its agendas page,
-        plus a structure check of posted agenda, minutes and bond overview PDFs. Compliance date from the U.S.
-        Department of Justice <a href="https://www.federalregister.gov/documents/2026/04/20/2026-07663/extension-of-compliance-dates-for-nondiscrimination-on-the-basis-of-disability-accessibility-of-web">interim final rule of April 20, 2026</a>
-        (28 CFR part 35), which keeps WCAG 2.1 AA as the standard.
+        Sources: the Port's <a href="https://portofcentralia.com/wp-content/uploads/2022/12/Port-of-Centralia-Website-RFP-2026.pdf">Website Redesign RFP</a>.
+        Findings measured Oct 31, 2026 with Lighthouse 12 (mobile): full reports for the
+        <a href="/audit/2026-10-31/portofcentralia-home.report.html">homepage</a> and
+        <a href="/audit/2026-10-31/portofcentralia-agendas.report.html">agendas page</a>, and the
+        <a href="/audit/2026-10-31/pdf-structure.txt">PDF structure check</a>. Compliance date from the U.S. Department of
+        Justice <a href="https://www.federalregister.gov/documents/2026/04/20/2026-07663/extension-of-compliance-dates-for-nondiscrimination-on-the-basis-of-disability-accessibility-of-web">interim final rule of April 20, 2026</a>
+        (28 CFR part 35), which keeps WCAG 2.1 AA as the standard. Load times vary from run to run.
       </p>
     </div>
   </section>

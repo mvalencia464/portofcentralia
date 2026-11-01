@@ -16,48 +16,69 @@ export const contact = {
   mapsHref: 'https://www.google.com/maps/search/?api=1&query=3508+Galvin+Road+Centralia+WA+98531',
 };
 
+// From the Port's meeting calendar entry (portofcentralia.com/event/regular-meeting).
+export const remoteAttendance = {
+  webexLink: 'https://portofcentralia.my.webex.com/portofcentralia.my/j.php?MTID=mc814b46c1a53cab61b7c9f04deeb2de7',
+  meetingNumber: '2553 426 0388',
+  phone: '1-650-479-3208',
+  phoneHref: 'tel:+16504793208',
+  password: '3527',
+};
+
 export const social = [
   { name: 'Facebook', href: 'https://www.facebook.com/portofcentralia', icon: 'facebook' },
   { name: 'YouTube', href: 'https://www.youtube.com/@portofcentralia', icon: 'youtube' },
 ] as const;
 
+// Pages outside the demo link to their current home on portofcentralia.com.
+export const official = {
+  commissioners: `${OFFICIAL_SITE}/commissioners/`,
+  history: `${OFFICIAL_SITE}/history/`,
+  industrialParks: `${OFFICIAL_SITE}/industrial-parks/`,
+  notices: `${OFFICIAL_SITE}/documents-center/newsletters/`,
+  news: `${OFFICIAL_SITE}/documents-center/`,
+  calendar: `${OFFICIAL_SITE}/calendar/`,
+  privacy: `${OFFICIAL_SITE}/privacy-policy/`,
+  search: `${OFFICIAL_SITE}/`,
+};
+
 export const nav = [
   {
     label: 'About',
     items: [
-      { label: 'Commissioners', href: '/about/commissioners' },
-      { label: 'History', href: '/about/history' },
-      { label: 'Master Plan', href: '/about/master-plan' },
+      { label: 'Commissioners', href: official.commissioners },
+      { label: 'History', href: official.history },
+      { label: 'Master Plan (PDF)', href: `${OFFICIAL_SITE}/wp-content/uploads/2022/12/2023-Port-of-Centralia-Master-Plan-Ray.pdf` },
     ],
   },
   {
     label: 'Industrial Parks',
     items: [
-      { label: 'Park I', href: '/industrial-parks/park-1' },
-      { label: 'Park II', href: '/industrial-parks/park-2' },
-      { label: 'Park 3', href: '/industrial-parks/park-3' },
+      { label: 'Park I, Park II & Park 3', href: '/#parks' },
+      { label: 'Infrastructure', href: '/#infrastructure' },
+      { label: 'Park details on portofcentralia.com', href: official.industrialParks },
     ],
   },
   {
     label: 'Do Business',
     items: [
-      { label: 'Available Sites', href: '/do-business/sites' },
-      { label: 'Incentives & Bonds', href: '/do-business/incentives' },
-      { label: 'Foreign Trade Zone', href: '/do-business/foreign-trade-zone' },
-      { label: 'Contractor Rosters', href: '/do-business/rosters' },
+      { label: 'Available Sites', href: official.industrialParks },
+      { label: 'Incentives & Bonds', href: '/#incentives' },
+      { label: 'Foreign Trade Zone', href: '/#infrastructure' },
+      { label: 'Contractor Rosters', href: '/#rosters' },
     ],
   },
   {
     label: 'Meetings & Documents',
     items: [
       { label: 'Agendas & Minutes', href: '/meetings' },
+      { label: 'Attend a Meeting', href: '/meetings#attend' },
       { label: 'Meeting Videos', href: '/meetings#videos' },
-      { label: 'Public Notices', href: '/notices' },
-      { label: 'Newsletters', href: '/newsletters' },
+      { label: 'Notices & Newsletters', href: official.notices },
     ],
   },
-  { label: 'News', href: '/news' },
-  { label: 'Calendar', href: '/calendar' },
+  { label: 'News', href: official.news },
+  { label: 'Calendar', href: official.calendar },
   { label: 'Contact', href: '/#contact' },
 ];
 

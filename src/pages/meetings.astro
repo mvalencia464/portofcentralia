@@ -1,8 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
-import { OFFICIAL_SITE, documents } from '../data/site';
-import { getMeetings, formatDate, meetingTitle } from '../lib/meetings';
+import { OFFICIAL_SITE, documents, contact, remoteAttendance } from '../data/site';
+import { getMeetings, formatDate, meetingTitle, docOf } from '../lib/meetings';
 
 const { upcoming, past } = await getMeetings();
 
@@ -29,7 +29,7 @@ const monthName = (key: string) =>
         </ol>
       </nav>
       <h1>Meetings, agendas &amp; minutes</h1>
-      <p>Commission meetings are open to the public. Each meeting's agenda, minutes, and video are listed together.</p>
+      <p>Commission meetings are open to the public, in person or by Webex and phone. Each meeting's agenda, minutes, and video are listed together.</p>
     </div>
   </div>
 
@@ -46,8 +46,16 @@ const monthName = (key: string) =>
                   {meetingTitle(m)}
                   {m.time && <>, {m.time}</>}
                 </p>
-                {m.location && <p>{m.location}</p>}
-                <p>{m.documents.length ? 'Agenda posted below' : 'Agenda not yet posted'}</p>
+                {m.hearing && <p class="upcoming__hearing">Public hearing: {m.hearing}</p>}
+                {m.location && <p>{m.location} or remotely</p>}
+                <p>{docOf(m, 'Agenda') ? 'Agenda posted' : 'Agenda not yet posted'}</p>
+                {docOf(m, 'Notice') && (
+                  <p>
+                    <a href={docOf(m, 'Notice')!.href} aria-label={`Notice of public hearing (PDF), ${formatDate(m.date)}`}>
+                      Notice of public hearing (PDF)
+                    </a>
+                  </p>
+                )}
               </li>
             ))}
           </ul>
@@ -55,6 +63,40 @@ const monthName = (key: string) =>
           <p>No upcoming meetings are scheduled yet.</p>
         )
       }
+
+      <div class="attend" id="attend">
+        <h2>Attend in person or remotely</h2>
+        <div class="attend__grid">
+          <div>
+            <h3>In person</h3>
+            <p>Port of Centralia office<br />{contact.street}, {contact.city}, {contact.region} {contact.postalCode}</p>
+          </div>
+          <div>
+            <h3>By video (Webex)</h3>
+            <p>
+              <a href={remoteAttendance.webexLink}>Join the meeting on Webex</a><br />
+              Meeting number: {remoteAttendance.meetingNumber}<br />
+              Password: {remoteAttendance.password}
+            </p>
+          </div>
+          <div>
+            <h3>By phone</h3>
+            <p>
+              Call <a href={remoteAttendance.phoneHref}>{remoteAttendance.phone}</a><br />
+              Access code: {remoteAttendance.meetingNumber}<br />
+              Password: {remoteAttendance.password}
+            </p>
+          </div>
+          <div>
+            <h3>Public comment</h3>
+            <p>
+              Raise your hand in Webex, or press *3 on the phone. Written comments go to{' '}
+              <a href={`mailto:${contact.email}`}>{contact.email}</a> by 2:00 pm on the meeting day.
+            </p>
+          </div>
+        </div>
+        <p class="attend__note">Call-in details can change. Each meeting's agenda has the current information.</p>
+      </div>
     </div>
   </section>
 
@@ -88,12 +130,20 @@ const monthName = (key: string) =>
                     <th scope="row">
                       <time datetime={m.date}>{formatDate(m.date, 'short')}</time>
                     </th>
-                    <td data-label="Meeting">{meetingTitle(m)}</td>
+                    <td data-label="Meeting">
+                      {meetingTitle(m)}
+                      {docOf(m, 'Notice') && (
+                        <>
+                          <br />
+                          <a href={docOf(m, 'Notice')!.href} aria-label={`Hearing notice (PDF), ${when}`}>Hearing notice (PDF)</a>
+                        </>
+                      )}
+                    </td>
                     <td data-label="Agenda">
                       {agendas.length ? (
                         <ul>
                           {agendas.map((d) => (
-                            <li><a href={d.href}>{d.label}<span class="sr-only">, {when}</span> (PDF)</a></li>
+                            <li><a href={d.href} aria-label={`${d.label} (PDF), ${when}`}>{d.label} (PDF)</a></li>
                           ))}
                         </ul>
                       ) : (
@@ -104,7 +154,7 @@ const monthName = (key: string) =>
                       {minutes.length ? (
                         <ul>
                           {minutes.map((d) => (
-                            <li><a href={d.href}>{d.label}<span class="sr-only">, {when}</span> (PDF)</a></li>
+                            <li><a href={d.href} aria-label={`${d.label} (PDF), ${when}`}>{d.label} (PDF)</a></li>
                           ))}
                         </ul>
                       ) : (
@@ -113,7 +163,7 @@ const monthName = (key: string) =>
                     </td>
                     <td data-label="Video">
                       {m.video ? (
-                        <a href={m.video}>Watch<span class="sr-only"> the {when} meeting</span> on YouTube</a>
+                        <a href={m.video} aria-label={`Watch on YouTube, ${when}`}>Watch on YouTube</a>
                       ) : (
                         <span class="pending">Not listed</span>
                       )}

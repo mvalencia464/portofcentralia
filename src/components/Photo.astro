@@ -1,5 +1,5 @@
 ---
-import { images, imageSrc, webpSrcset, type ImageKey } from '../data/images';
+import { images, imageSrc, webpSrcset, avifSrcset, type ImageKey } from '../data/images';
 
 interface Props {
   image: ImageKey;
@@ -11,6 +11,7 @@ const { image, sizes = '100vw', priority = false } = Astro.props;
 const meta = images[image];
 const src = imageSrc(image);
 const srcset = webpSrcset(image);
+const avif = avifSrcset(image);
 const uid = `ph-${image}-${Math.random().toString(36).slice(2, 7)}`;
 const scene = image === 'rail' ? 'rail' : image === 'community' ? 'community' : image === 'park2' ? 'lots' : 'parks';
 ---
@@ -19,6 +20,7 @@ const scene = image === 'rail' ? 'rail' : image === 'community' ? 'community' : 
   src ? (
     <>
       <picture>
+        {avif && <source type="image/avif" srcset={avif} sizes={sizes} />}
         {srcset && <source type="image/webp" srcset={srcset} sizes={sizes} />}
         <img
           src={src}
@@ -31,7 +33,7 @@ const scene = image === 'rail' ? 'rail' : image === 'community' ? 'community' : 
           decoding={priority ? 'sync' : 'async'}
         />
       </picture>
-      {'stock' in meta && <span class="stock-tag">Representative photo</span>}
+      {'representative' in meta && <span class="stock-tag">Representative photo</span>}
     </>
   ) : (
     <>

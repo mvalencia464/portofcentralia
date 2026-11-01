@@ -14,7 +14,7 @@ const uploaded = new Set(
 
 interface Credit {
   author: string;
-  license: 'Public domain' | 'CC0';
+  license: 'Public domain' | 'CC0' | 'CC BY-SA 3.0' | 'CC BY-SA 4.0';
   source: string;
 }
 
@@ -22,12 +22,16 @@ interface ImageMeta {
   file: string;
   /** WebP copies named <stem>-<width>.webp */
   webpWidths?: number[];
+  /** AVIF copies at the same widths, named <stem>-<width>.avif */
+  avif?: boolean;
   width: number;
   height: number;
   alt: string;
   label: string;
-  /** Stock stand-ins (not the Port's property) get a visible tag and a credit. */
+  /** Photos not owned by the Port get a credit; stand-ins also get a visible tag. */
   stock?: Credit;
+  /** True for stand-ins that don't show the Port's own sites. */
+  representative?: boolean;
 }
 
 export const images = {
@@ -42,10 +46,12 @@ export const images = {
   park1: {
     file: 'park-1-aerial.jpg',
     webpWidths: [480, 800],
+    avif: true,
+    representative: true,
     width: 1200,
     height: 675,
     alt: 'Aerial view of a large distribution center with truck docks and parking',
-    label: 'PHOTO: Park I aerial',
+    label: 'PHOTO: Distribution center aerial',
     stock: {
       author: 'Wikideas1',
       license: 'CC0',
@@ -55,10 +61,12 @@ export const images = {
   park2: {
     file: 'park-2-warehouse.jpg',
     webpWidths: [480, 800],
+    avif: true,
+    representative: true,
     width: 1200,
     height: 675,
     alt: 'Modern metal-clad warehouse with landscaping along the drive',
-    label: 'PHOTO: Park II',
+    label: 'PHOTO: Modern warehouse',
     stock: {
       author: 'DimiTalen',
       license: 'CC0',
@@ -68,10 +76,12 @@ export const images = {
   park3: {
     file: 'park-3-warehouse.jpg',
     webpWidths: [480, 800],
+    avif: true,
+    representative: true,
     width: 1200,
     height: 675,
     alt: 'Business park street lined with modern light-industrial buildings',
-    label: 'PHOTO: Park 3',
+    label: 'PHOTO: Business park street',
     stock: {
       author: 'DimiTalen',
       license: 'CC0',
@@ -79,31 +89,31 @@ export const images = {
     },
   },
   rail: {
-    file: 'rail-service.jpg',
+    file: 'rail-centralia-depot.jpg',
     webpWidths: [400, 800],
+    avif: true,
     width: 800,
     height: 1000,
     alt: '',
-    label: 'PHOTO: Freight rail line',
+    label: 'Freight train at Centralia Union Depot',
     stock: {
-      author: 'G Pei',
-      license: 'Public domain',
-      source:
-        'https://commons.wikimedia.org/wiki/File:Westbound_Pumpkin_(BNSF_GE_ES44DC_locomotive_leading_train_August_2025).jpg',
+      author: 'Joe Mabel',
+      license: 'CC BY-SA 3.0',
+      source: 'https://commons.wikimedia.org/wiki/File:Centralia_Union_Depot_platform_with_freight_train.jpg',
     },
   },
   community: {
-    file: 'centralia-rainier.jpg',
+    file: 'rainier-from-centralia.jpg',
     webpWidths: [480, 800],
+    avif: true,
     width: 1200,
     height: 675,
     alt: '',
-    label: 'PHOTO: Centralia with Mount Rainier',
+    label: 'Mount Rainier from Centralia',
     stock: {
-      author: 'National Park Service',
-      license: 'Public domain',
-      source:
-        'https://commons.wikimedia.org/wiki/File:Inspiration_Point,_a_view_point_on_the_western_end_of_Stevens_Canyon_Road,_has_excellent_views_of_Mount_Rainier._(1d57e53e-e569-48a2-b8c4-71133b5c62fc).JPG',
+      author: 'Chris Light',
+      license: 'CC BY-SA 4.0',
+      source: 'https://commons.wikimedia.org/wiki/File:Mt_Rainier_917.jpg',
     },
   },
 } satisfies Record<string, ImageMeta>;
@@ -123,6 +133,10 @@ export function webpSrcset(key: ImageKey): string | null {
   if (!src || !widths) return null;
   const stem = src.replace(/\.\w+$/, '');
   return widths.map((w) => `${stem}-${w}.webp ${w}w`).join(', ');
+}
+
+export function avifSrcset(key: ImageKey): string | null {
+  return meta(key).avif ? (webpSrcset(key)?.replaceAll('.webp', '.avif') ?? null) : null;
 }
 
 export const stockCredits = (Object.keys(images) as ImageKey[])
