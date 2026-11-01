@@ -30,12 +30,12 @@ npm run dev
 ## Images
 
 All images live in `public/images/` and ship with the site, so the Port owns them along with everything else (the RFP
-requires the Port to keep ownership and control of its content). Each photo has AVIF and WebP copies; the hero uses
-WebP only because AVIF wasn't smaller for that image.
+requires the Port to keep ownership and control of its content). Each photo has AVIF and WebP copies, and the hero's AVIF is
+preloaded.
 
 | Key         | File                     | Source (license)                                                          |
 | ----------- | ------------------------ | ------------------------------------------------------------------------- |
-| `hero`      | `hero-centralia-aerial`  | Aerial of Centralia, portofcentralia.com                                  |
+| `hero`      | `hero-centralia-aerial`  | Aerial of Centralia from portofcentralia.com, AI-upscaled to 2000px       |
 | `logo`      | `logo-blue.png`, `logo-white.png` | portofcentralia.com                                              |
 | `rail`      | `rail-centralia-depot`   | Freight train at Centralia Union Depot, Joe Mabel (CC BY-SA 3.0)          |
 | `community` | `rainier-from-centralia` | Mount Rainier from Centralia, Chris Light (CC BY-SA 4.0)                  |

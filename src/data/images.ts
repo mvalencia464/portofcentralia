@@ -37,9 +37,10 @@ interface ImageMeta {
 export const images = {
   hero: {
     file: 'hero-centralia-aerial.jpg',
-    webpWidths: [640, 800, 1200],
-    width: 1200,
-    height: 793,
+    webpWidths: [640, 800, 1200, 1600],
+    avif: true,
+    width: 1600,
+    height: 1057,
     alt: 'Aerial view of Centralia, with industrial buildings, a rail line, and open fields, and Mount Rainier on the horizon',
     label: 'PHOTO: Centralia aerial',
   },
