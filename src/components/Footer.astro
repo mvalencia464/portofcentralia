@@ -1,0 +1,165 @@
+---
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { contact, social, usdaStatement, documents } from '../data/site';
+import { stockCredits } from '../data/images';
+
+const year = new Date().getFullYear();
+const reportHref = `mailto:${contact.email}?subject=${encodeURIComponent('Website accessibility problem')}`;
+
+// Treeline: layered fir silhouettes with drooping tiers and a trunk, placed with
+// a fixed-seed random so every build draws the same skyline.
+function fir(x: number, base: number, h: number): string {
+  const tiers = 5;
+  const trunkH = h * 0.09;
+  const crown = h - trunkH;
+  const top = base - h;
+  const w = h * 0.3;
+  const left: string[] = [];
+  const right: string[] = [];
+  for (let i = 1; i <= tiers; i++) {
+    const t = i / tiers;
+    const y = top + crown * t;
+    const outer = w * (0.28 + 0.72 * t);
+    const inner = outer * 0.42;
+    const notchY = y - (crown / tiers) * 0.28;
+    left.push(`${(x - outer).toFixed(1)},${(y + 1.5).toFixed(1)}`);
+    right.unshift(`${(x + outer).toFixed(1)},${(y + 1.5).toFixed(1)}`);
+    if (i < tiers) {
+      left.push(`${(x - inner).toFixed(1)},${notchY.toFixed(1)}`);
+      right.unshift(`${(x + inner).toFixed(1)},${notchY.toFixed(1)}`);
+    }
+  }
+  const tw = Math.max(1.2, h * 0.035);
+  const yTrunk = top + crown + 1.5;
+  return `M${x},${top.toFixed(1)}L${left.join('L')}L${(x - tw).toFixed(1)},${yTrunk.toFixed(1)}L${(x - tw).toFixed(1)},${base}L${(x + tw).toFixed(1)},${base}L${(x + tw).toFixed(1)},${yTrunk.toFixed(1)}L${right.join('L')}Z`;
+}
+function treeline(seed: number, minH: number, maxH: number, gap: number, base: number): string {
+  let r = seed;
+  const rand = () => ((r = (r * 16807) % 2147483647) / 2147483647);
+  const parts: string[] = [];
+  for (let x = -10; x < 1620; x += gap * (0.6 + rand() * 0.8)) {
+    parts.push(fir(Math.round(x), base, minH + rand() * (maxH - minH)));
+  }
+  return parts.join('');
+}
+const treesBack = treeline(7, 22, 44, 22, 80);
+const treesFront = treeline(42, 34, 70, 38, 80);
+---
+
+<footer class="site-footer on-dark">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <a class="brand" href="/">
+          <Logo tone="light" />
+          <span class="sr-only">, home</span>
+        </a>
+        <p>Three industrial parks on the I-5 corridor in Lewis County, Washington.</p>
+      </div>
+
+      <nav aria-labelledby="footer-links-heading">
+        <h2 id="footer-links-heading">Quick links</h2>
+        <ul class="footer__links">
+          <li><a href="/industrial-parks">Industrial parks</a></li>
+          <li><a href="/meetings">Meeting agendas &amp; minutes</a></li>
+          <li><a href="/notices">Public notices</a></li>
+          <li><a href="/#rosters">Contractor rosters</a></li>
+          <li><a href={documents.masterPlan}>Master Plan (PDF)</a></li>
+          <li><a href="/news">News &amp; press releases</a></li>
+        </ul>
+      </nav>
+
+      <div>
+        <h2>Contact and hours</h2>
+        <address class="footer__contact">
+          <div>
+            <Icon name="pin" />
+            <span>{contact.street}<br />{contact.city}, {contact.region} {contact.postalCode}</span>
+          </div>
+          <div>
+            <Icon name="phone" />
+            <span><span class="sr-only">Phone: </span><a href={contact.phoneHref}>{contact.phone}</a></span>
+          </div>
+          <div>
+            <Icon name="fax" />
+            <span>Fax: {contact.fax}</span>
+          </div>
+          <div>
+            <Icon name="mail" />
+            <span><span class="sr-only">Email: </span><a href={`mailto:${contact.email}`}>{contact.email}</a></span>
+          </div>
+          <div>
+            <Icon name="clock" />
+            <span>{contact.hours}</span>
+          </div>
+        </address>
+      </div>
+
+      <div>
+        <h2>Follow the Port</h2>
+        <ul class="social">
+          {
+            social.map((s) => (
+              <li>
+                <a href={s.href}>
+                  <Icon name={s.icon} />
+                  <span class="sr-only">Port of Centralia on {s.name}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer__legal">
+      <section id="accessibility" aria-labelledby="a11y-heading">
+        <h2 id="a11y-heading">Accessibility</h2>
+        <p>
+          The Port is working to meet WCAG 2.1 Level AA. If anything on this site is hard to use, tell us and we will
+          help you get the information another way.
+        </p>
+        <p>
+          <a href={reportHref}>Report an accessibility problem</a> by email, or call{' '}
+          <a href={contact.phoneHref}>{contact.phone}</a>.
+        </p>
+        <p><a href="/accessibility">Read the accessibility statement</a></p>
+      </section>
+      <section aria-labelledby="usda-heading">
+        <h2 id="usda-heading">Anti-discrimination policy</h2>
+        <p>{usdaStatement}</p>
+      </section>
+    </div>
+
+    {
+      stockCredits.length > 0 && (
+        <p class="footer__credits">
+          Representative photos (public domain or CC0, via Wikimedia Commons):{' '}
+          {stockCredits.map((c, i) => (
+            <>
+              {i > 0 && '; '}
+              <a href={c.source}>{c.label}</a> by {c.author}
+            </>
+          ))}
+          .
+        </p>
+      )
+    }
+
+    <div class="footer__bottom">
+      <p>&copy; {year} Port of Centralia. Concept demo by Stoke Leads.</p>
+      <ul>
+        <li><a href="/accessibility">Accessibility</a></li>
+        <li><a href="/privacy">Privacy policy</a></li>
+        <li><a href="/sitemap">Site map</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <svg class="footer__trees" viewBox="0 0 1600 80" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+    <path class="footer__trees-back" d={treesBack}></path>
+    <path class="footer__trees-front" d={treesFront}></path>
+    <rect x="0" y="76" width="1600" height="4" class="footer__trees-front"></rect>
+  </svg>
+</footer>

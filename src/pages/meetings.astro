@@ -1,0 +1,138 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import { OFFICIAL_SITE, documents } from '../data/site';
+import { getMeetings, formatDate, meetingTitle } from '../lib/meetings';
+
+const { upcoming, past } = await getMeetings();
+
+// Group past meetings by month for scannable tables.
+const byMonth = new Map<string, typeof past>();
+for (const m of past) {
+  const key = m.date.slice(0, 7);
+  byMonth.set(key, [...(byMonth.get(key) ?? []), m]);
+}
+const monthName = (key: string) =>
+  new Date(`${key}-15T12:00:00Z`).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'long', year: 'numeric' });
+---
+
+<Base
+  title="Meetings, agendas & minutes | Port of Centralia"
+  description="Port of Centralia Commission meetings: upcoming dates, agendas, minutes, and video recordings in one place."
+>
+  <div class="page-head on-dark">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/">Home</a></li>
+          <li><span aria-current="page">Meetings</span></li>
+        </ol>
+      </nav>
+      <h1>Meetings, agendas &amp; minutes</h1>
+      <p>Commission meetings are open to the public. Each meeting's agenda, minutes, and video are listed together.</p>
+    </div>
+  </div>
+
+  <section class="section" id="upcoming" aria-labelledby="upcoming-heading">
+    <div class="container">
+      <h2 id="upcoming-heading">Upcoming meetings</h2>
+      {
+        upcoming.length ? (
+          <ul class="upcoming">
+            {upcoming.map((m) => (
+              <li>
+                <time datetime={m.date}>{formatDate(m.date, 'weekday')}</time>
+                <p>
+                  {meetingTitle(m)}
+                  {m.time && <>, {m.time}</>}
+                </p>
+                {m.location && <p>{m.location}</p>}
+                <p>{m.documents.length ? 'Agenda posted below' : 'Agenda not yet posted'}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No upcoming meetings are scheduled yet.</p>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="past-heading">
+    <div class="container">
+      <h2 id="past-heading">2026 meetings</h2>
+      <p>
+        Documents open as PDFs on portofcentralia.com. For 2021 to 2025, see the{' '}
+        <a href={`${OFFICIAL_SITE}/documents-center/meeting-agendas-and-minutes/`}>current archive</a>.
+      </p>
+      {
+        [...byMonth].map(([key, meetings]) => (
+          <table class="meetings-table">
+            <caption>{monthName(key)}</caption>
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Meeting</th>
+                <th scope="col">Agenda</th>
+                <th scope="col">Minutes</th>
+                <th scope="col">Video</th>
+              </tr>
+            </thead>
+            <tbody>
+              {meetings.map((m) => {
+                const when = formatDate(m.date);
+                const agendas = m.documents.filter((d) => d.kind === 'Agenda');
+                const minutes = m.documents.filter((d) => d.kind === 'Minutes');
+                return (
+                  <tr>
+                    <th scope="row">
+                      <time datetime={m.date}>{formatDate(m.date, 'short')}</time>
+                    </th>
+                    <td data-label="Meeting">{meetingTitle(m)}</td>
+                    <td data-label="Agenda">
+                      {agendas.length ? (
+                        <ul>
+                          {agendas.map((d) => (
+                            <li><a href={d.href}>{d.label}<span class="sr-only">, {when}</span> (PDF)</a></li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <span class="pending">Not listed</span>
+                      )}
+                    </td>
+                    <td data-label="Minutes">
+                      {minutes.length ? (
+                        <ul>
+                          {minutes.map((d) => (
+                            <li><a href={d.href}>{d.label}<span class="sr-only">, {when}</span> (PDF)</a></li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <span class="pending">Pending approval</span>
+                      )}
+                    </td>
+                    <td data-label="Video">
+                      {m.video ? (
+                        <a href={m.video}>Watch<span class="sr-only"> the {when} meeting</span> on YouTube</a>
+                      ) : (
+                        <span class="pending">Not listed</span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section" id="videos" aria-labelledby="videos-heading">
+    <div class="container">
+      <h2 id="videos-heading">Meeting videos</h2>
+      <p>Every recorded meeting is on the Port's YouTube channel. Turn on captions with the CC button in the player.</p>
+      <a class="btn btn--outline" href={documents.meetingVideos}>All meeting videos on YouTube <Icon name="arrow" /></a>
+    </div>
+  </section>
+</Base>

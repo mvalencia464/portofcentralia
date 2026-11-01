@@ -1,0 +1,23 @@
+[
+  {
+    "id": "park-1",
+    "order": 1,
+    "name": "Park I",
+    "facts": ["Multimodal transportation access", "Fewer than 2 miles from I-5"],
+    "image": "park1"
+  },
+  {
+    "id": "park-2",
+    "order": 2,
+    "name": "Park II",
+    "facts": ["Multimodal transportation access", "Fewer than 2 miles from I-5"],
+    "image": "park2"
+  },
+  {
+    "id": "park-3",
+    "order": 3,
+    "name": "Park 3",
+    "facts": ["Mixed-use development", "Adjacent to I-5, with a planned direct connection"],
+    "image": "park3"
+  }
+]

@@ -1,0 +1,240 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+
+// Findings from portofcentralia.com, checked Oct 31, 2026: Lighthouse 12 (mobile)
+// on the homepage and the agendas page, plus a structure check of the posted PDFs.
+type Status = 'done' | 'phase1' | 'phase2';
+
+const statusLabel: Record<Status, string> = {
+  done: 'Done in demo',
+  phase1: 'At launch',
+  phase2: 'After launch',
+};
+
+const groups: { title: string; rows: { need: string; today: string; fix: string; status: Status }[] }[] = [
+  {
+    title: 'Accessibility: ADA Title II (WCAG 2.1 AA)',
+    rows: [
+      {
+        need: 'Readable text contrast',
+        today: '71 contrast failures across the homepage and agendas page',
+        fix: 'Every color pair tested to 4.5:1 or better, text never placed on photos',
+        status: 'done',
+      },
+      {
+        need: 'Every button and link has a name',
+        today: '89 unlabeled buttons and 11 unlabeled links',
+        fix: 'Semantic HTML with visible, descriptive labels',
+        status: 'done',
+      },
+      {
+        need: 'Logical page structure',
+        today: 'Heading levels skip on the homepage',
+        fix: 'One H1 per page, ordered headings, landmarks, skip link',
+        status: 'done',
+      },
+      {
+        need: 'Keyboard and screen reader access',
+        today: 'Relies on an add-on accessibility toolbar',
+        fix: 'Built-in access: keyboard menus, focus rings, no overlay. Manual NVDA and VoiceOver pass',
+        status: 'phase1',
+      },
+      {
+        need: 'Accessible documents',
+        today: 'Agendas and minutes are scanned images with no text or tags. Bond overview is untagged',
+        fix: 'An HTML version of every agenda and minutes, plus tagged PDFs, for current and new documents',
+        status: 'phase1',
+      },
+      {
+        need: 'Captioned meeting video',
+        today: 'Recordings on YouTube; captions not reviewed',
+        fix: 'Reviewed captions and a transcript link for each meeting',
+        status: 'phase1',
+      },
+      {
+        need: 'A way to report a barrier',
+        today: 'No accessibility statement or contact in the footer',
+        fix: 'Statement plus email and phone reporting on every page',
+        status: 'done',
+      },
+    ],
+  },
+  {
+    title: 'Public records and transparency',
+    rows: [
+      {
+        need: 'Meetings easy to follow',
+        today: 'Agendas, minutes and videos sit in three separate lists',
+        fix: 'One row per meeting with agenda, minutes and video together',
+        status: 'done',
+      },
+      {
+        need: 'Next meeting always current',
+        today: 'Shown only inside a calendar widget',
+        fix: 'Next meeting on the homepage, refreshed automatically every day',
+        status: 'done',
+      },
+    ],
+  },
+  {
+    title: 'Performance, upkeep and security',
+    rows: [
+      {
+        need: 'Fast on phones',
+        today: 'Main content loads in 10.0 s on mobile (homepage), 1.4 MB page',
+        fix: 'Static pages on Cloudflare: 1.6 s, about 250 KB',
+        status: 'done',
+      },
+      {
+        need: 'Easy updates for staff',
+        today: 'Page-builder editor; documents uploaded by hand',
+        fix: 'Email a document to publish it, with an automatic accessibility check and approval by reply',
+        status: 'phase2',
+      },
+      {
+        need: 'Contractor roster sign-up',
+        today: 'Download, fill and return a PDF',
+        fix: 'Accessible online application form',
+        status: 'phase2',
+      },
+      {
+        need: 'Low-risk hosting',
+        today: 'Plugins and server to keep patched',
+        fix: 'No server or plugins to patch, HTTPS everywhere',
+        status: 'done',
+      },
+    ],
+  },
+];
+
+const counts = groups
+  .flatMap((g) => g.rows)
+  .reduce((acc, r) => ({ ...acc, [r.status]: (acc[r.status] ?? 0) + 1 }), {} as Record<Status, number>);
+const total = groups.reduce((n, g) => n + g.rows.length, 0);
+---
+
+<Base
+  title="Website readiness plan | Port of Centralia concept"
+  description="What the Port of Centralia's website needs for ADA Title II and the RFP, what the current site does today, and how Stoke Leads will fix it."
+>
+  <div class="page-head on-dark">
+    <div class="container">
+      <p class="eyebrow">Stoke Leads · Port of Centralia RFP</p>
+      <h1>Website readiness plan</h1>
+      <p>What the Port's website must do, where it stands today, and how we close each gap well before the federal deadline.</p>
+    </div>
+  </div>
+
+  <section class="section readiness" aria-labelledby="summary-heading">
+    <div class="container">
+      <h2 id="summary-heading" class="sr-only">At a glance</h2>
+      <ul class="stat-cards">
+        <li>
+          <p class="stat-cards__value">Apr 26, 2028</p>
+          <p class="stat-cards__label">ADA Title II compliance date for special districts such as the Port (WCAG 2.1 AA)</p>
+        </li>
+        <li>
+          <p class="stat-cards__value">89 <span>/</span> 78</p>
+          <p class="stat-cards__label">Accessibility score today: homepage / agendas page (Lighthouse, out of 100)</p>
+        </li>
+        <li>
+          <p class="stat-cards__value">100</p>
+          <p class="stat-cards__label">Our working demo's score, with 0 automated accessibility errors</p>
+        </li>
+      </ul>
+
+      <div class="readiness__head">
+        <div>
+          <p class="eyebrow">Checklist</p>
+          <h2>What's needed and how we fix it</h2>
+        </div>
+        <ul class="legend" aria-label="Status key">
+          <li><span class="status status--done"><Icon name="check" />{statusLabel.done}</span> {counts.done} of {total}</li>
+          <li><span class="status status--phase1"><Icon name="clock" />{statusLabel.phase1}</span> {counts.phase1 ?? 0}</li>
+          <li><span class="status status--phase2"><Icon name="arrow" />{statusLabel.phase2}</span> {counts.phase2 ?? 0}</li>
+        </ul>
+      </div>
+
+      {
+        groups.map((group) => (
+          <table class="checklist">
+            <caption>{group.title}</caption>
+            <thead>
+              <tr>
+                <th scope="col">Requirement</th>
+                <th scope="col">Today on portofcentralia.com</th>
+                <th scope="col">How we fix it</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {group.rows.map((row) => (
+                <tr>
+                  <th scope="row">{row.need}</th>
+                  <td data-label="Today">{row.today}</td>
+                  <td data-label="How we fix it">{row.fix}</td>
+                  <td data-label="Status">
+                    <span class={`status status--${row.status}`}>
+                      <Icon name={row.status === 'done' ? 'check' : row.status === 'phase1' ? 'clock' : 'arrow'} />
+                      {statusLabel[row.status]}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section section--tint" aria-labelledby="delivery-heading">
+    <div class="container">
+      <p class="eyebrow">Delivery</p>
+      <h2 id="delivery-heading">Three steps, one accountable team</h2>
+      <ol class="phases">
+        <li>
+          <p class="phases__step">1 · Launch</p>
+          <h3>Accessible site, live</h3>
+          <p>Full site on this foundation. Current agendas, minutes and key documents rebuilt as HTML and tagged PDFs. Manual screen reader and keyboard audit, report delivered.</p>
+        </li>
+        <li>
+          <p class="phases__step">2 · Simplify</p>
+          <h3>Updates without a web person</h3>
+          <p>Email-to-publish for agendas and notices with an automatic accessibility check. Online roster application. Staff training.</p>
+        </li>
+        <li>
+          <p class="phases__step">3 · Sustain</p>
+          <h3>Stay compliant</h3>
+          <p>Automated accessibility checks on every update, a quarterly manual review, and a public accessibility statement kept current.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="proof-heading">
+    <div class="container proof">
+      <div>
+        <p class="eyebrow">Proof, not promises</p>
+        <h2 id="proof-heading">See it working</h2>
+        <p>
+          This concept already runs on the Port's real meetings, documents and contact details. Every claim on this page
+          can be checked in the demo.
+        </p>
+      </div>
+      <div class="proof__actions">
+        <a class="btn btn--primary" href="/">View the demo homepage <Icon name="arrow" /></a>
+        <a class="btn btn--outline" href="/meetings">View the meetings page <Icon name="arrow" /></a>
+      </div>
+    </div>
+    <div class="container">
+      <p class="sources">
+        Sources: findings measured Oct 31, 2026 with Lighthouse 12 (mobile) on portofcentralia.com and its agendas page,
+        plus a structure check of posted agenda, minutes and bond overview PDFs. Compliance date from the U.S.
+        Department of Justice <a href="https://www.federalregister.gov/documents/2026/04/20/2026-07663/extension-of-compliance-dates-for-nondiscrimination-on-the-basis-of-disability-accessibility-of-web">interim final rule of April 20, 2026</a>
+        (28 CFR part 35), which keeps WCAG 2.1 AA as the standard.
+      </p>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,131 @@
+{
+  "project": "Port of Centralia homepage demo (spec sample for RFP response, due Nov 13, 2026)",
+  "goal": "One production-quality homepage that shows the Port what their new site could be: faster, clearer, fully accessible (WCAG 2.1 AA / DOJ Title II), and easy to keep updated. Content is real, pulled from portofcentralia.com; anything not verified is a clearly marked placeholder.",
+  "stack": {
+    "framework": "Astro (static output, zero client JS by default; islands only where needed)",
+    "styling": "Plain CSS or Tailwind with design tokens; no UI kit that injects inaccessible markup",
+    "content": "Content collections (Markdown/JSON) for meetings, documents, news, and parks so the same data can feed an email-to-publish workflow later",
+    "hosting": "Cloudflare Pages",
+    "performance_targets": "Lighthouse 100 accessibility, 95+ performance, SEO and best practices on mobile; LCP under 1.5s; total JS under 30 KB"
+  },
+  "audiences": [
+    "Businesses and site selectors evaluating land, lease, build-to-suit, or relocation",
+    "Residents and taxpayers looking for meetings, agendas, minutes, and public notices",
+    "Contractors wanting to join the Small Works or A&E roster",
+    "Current Port tenants",
+    "Media"
+  ],
+  "brand_and_tone": {
+    "voice": "Plain-spoken, confident, civic. Short sentences. No jargon without explanation.",
+    "visual": "Clean, modern industrial: deep navy or forest green primary, warm accent (safety orange or wheat), lots of white space, real photography of the parks and I-5 corridor (placeholder images labeled 'PHOTO: Park 3 aerial' etc.). Keep the existing Port logo.",
+    "contrast": "All text and UI meet 4.5:1 (3:1 for large text and UI components); verify every color pair"
+  },
+  "header": {
+    "elements": ["Skip to main content link (first focusable)", "Port logo linking home", "Primary nav", "Search", "Prominent 'Meetings & Agendas' button"],
+    "primary_nav": [
+      "About (Commissioners, History, Master Plan)",
+      "Industrial Parks (Park I, Park II, Park 3)",
+      "Do Business (Available Sites, Incentives & Bonds, Foreign Trade Zone, Rosters)",
+      "Meetings & Documents (Agendas & Minutes, Meeting Videos, Public Notices, Newsletters)",
+      "News",
+      "Calendar",
+      "Contact"
+    ],
+    "behavior": "Keyboard-operable disclosure menus (button + aria-expanded), visible focus ring, mobile menu that traps nothing and closes on Escape"
+  },
+  "sections": [
+    {
+      "id": "hero",
+      "headline": "Room to grow on the I-5 corridor",
+      "subhead": "Three industrial parks between Seattle and Portland with rail, utilities, and sites from 1 to 100 acres.",
+      "ctas": [{"label": "Find a site", "href": "/industrial-parks"}, {"label": "Upcoming meetings", "href": "/meetings"}],
+      "media": "Aerial photo of Park 3 with meaningful alt text; no autoplay video, no text baked into images"
+    },
+    {
+      "id": "quick-tasks",
+      "purpose": "Top public tasks in one click",
+      "items": ["Next commission meeting (date, time, agenda link, video link) pulled from the meetings collection", "Latest agenda & minutes", "Watch meeting videos (captioned)", "Public notices", "Join a contractor roster", "Contact the Port"]
+    },
+    {
+      "id": "parks",
+      "headline": "Three parks, one Master Plan",
+      "cards": [
+        {"name": "Park I", "facts": ["Multimodal access", "Under 2 miles from I-5"]},
+        {"name": "Park II", "facts": ["Multimodal access", "Under 2 miles from I-5"]},
+        {"name": "Park 3", "facts": ["Mixed-use development", "Adjacent to and planned direct connection to I-5"]}
+      ],
+      "note": "Options include land lease, build-to-suit, and outright sale. Master Plan adopted 1990, revised 2023."
+    },
+    {
+      "id": "infrastructure",
+      "headline": "Infrastructure ready on day one",
+      "facts_from_current_site": [
+        "Union Pacific / BNSF rail service",
+        "4-inch natural gas line",
+        "10-inch water mains at 100 PSI",
+        "10-inch sewer mains with 6-inch stubs to each lot",
+        "Electricity for nearly any demand",
+        "Broadband from multiple providers",
+        "Foreign Trade Zone designation"
+      ],
+      "format": "Icon list with text labels (icons decorative, aria-hidden)"
+    },
+    {
+      "id": "incentives",
+      "headline": "Incentives that lower your costs",
+      "facts_from_current_site": [
+        "Access to low-interest Industrial Development Revenue Bonds",
+        "No state or local corporate income tax",
+        "No local B&O taxes",
+        "Rural County sales/use tax deferral on buildings and equipment during construction",
+        "Rural County B&O tax credits for new employees",
+        "Warehouse tax remittance eligibility"
+      ],
+      "cta": {"label": "Read the bond overview (accessible PDF + HTML version)", "href": "/do-business/incentives"}
+    },
+    {
+      "id": "meetings-transparency",
+      "headline": "Open meetings, easy to follow",
+      "content": "List of the 3 most recent meetings, each with agenda, minutes, and captioned video linked together; filter by year on the full page",
+      "accessibility": "Every document offered as accessible HTML or tagged PDF; video player with captions on by default option, keyboard controls, transcript link where required"
+    },
+    {
+      "id": "news",
+      "headline": "News & notices",
+      "content": "3 latest press releases or notices from the news collection (PLACEHOLDER items clearly labeled)"
+    },
+    {
+      "id": "rosters",
+      "headline": "Work with the Port",
+      "content": "The Port keeps a Small Works Roster and an Architectural & Engineering Roster, created every January and updated through December 31.",
+      "ctas": [{"label": "2026 Small Works Roster application", "href": "/do-business/rosters"}, {"label": "A&E roster (Standard Form 330)", "href": "/do-business/rosters"}],
+      "note": "Replace the PDF-only application with an accessible online form as a later phase"
+    },
+    {
+      "id": "contact-strip",
+      "content": "Phone 360-736-3527, Fax 360-330-5666, 3508 Galvin Road, Centralia, WA 98531, Monday to Friday 8:00 am to 5:00 pm, embedded map with a text address alternative"
+    }
+  ],
+  "footer": {
+    "elements": ["Quick links", "Contact and hours", "Social links with accessible names", "Accessibility statement link with a way to report a barrier", "USDA anti-discrimination policy (keep existing wording)", "Privacy policy", "Copyright Port of Centralia"]
+  },
+  "accessibility_requirements": [
+    "WCAG 2.1 AA throughout; semantic landmarks (header, nav, main, footer) and one h1 with logical heading order",
+    "All interactive elements reachable and usable by keyboard with visible focus",
+    "Meaningful alt text; decorative images empty alt",
+    "No information conveyed by color alone; link text that makes sense out of context (no 'click here')",
+    "Respects prefers-reduced-motion; no carousels or autoplay",
+    "Text resizes to 200% and reflows at 320px width without horizontal scrolling",
+    "Form fields with visible labels, error messages tied by aria-describedby",
+    "lang attribute set; page titles unique",
+    "Test with axe and Pa11y in CI plus a manual NVDA/VoiceOver and keyboard pass; include the report in the proposal"
+  ],
+  "update_workflow_demo": {
+    "idea": "Staff email an agenda, minutes, or notice to a dedicated address (e.g. publish@...) and it appears on the right page after an automatic accessibility check, with staff approval by reply",
+    "demo_scope": "Show it working for one document type (meeting agenda) end to end, or as a short screen recording if not built in time",
+    "fallback_editor": "Keystatic or TinaCMS for occasional page edits by staff"
+  },
+  "seo": ["Title and meta description per page", "LocalBusiness/GovernmentOrganization schema with address and hours", "Open Graph image", "XML sitemap", "Descriptive URLs"],
+  "deliverables": ["Live preview URL on Cloudflare Pages", "Repo with README", "Lighthouse and axe reports (screenshots for the proposal)", "Mobile and desktop screenshots"],
+  "constraints": ["Do not present the demo as the official Port site; add a small 'Concept demo by Stoke Leads' banner and noindex", "Use only facts from portofcentralia.com; mark everything else PLACEHOLDER", "Keep it to the homepage plus at most a meetings page"]
+}

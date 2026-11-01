@@ -1,0 +1,30 @@
+---
+import { logo } from '../data/images';
+
+interface Props {
+  tone?: 'dark' | 'light';
+}
+
+const { tone = 'dark' } = Astro.props;
+const src = tone === 'dark' ? logo.dark : logo.light;
+const ink = tone === 'dark' ? '#0b2e52' : '#ffffff';
+const tree = tone === 'dark' ? '#2a6139' : '#ffffff';
+---
+
+{
+  src ? (
+    <img src={src} alt="Port of Centralia" width="204" height="56" />
+  ) : (
+    // Stand-in wordmark until the Port's logo file is on R2.
+    <svg viewBox="0 0 250 68" width="204" height="56" role="img" aria-label="Port of Centralia" xmlns="http://www.w3.org/2000/svg">
+      <g fill={tree}>
+        <path d="M22 50 30 18l8 32zM34 50l9-38 9 38zM48 50l7-26 7 26z" />
+        <rect x="29" y="50" width="2" height="5" />
+        <rect x="42" y="50" width="2" height="5" />
+      </g>
+      <path d="M4 62c20-7 42-9 62-6" fill="none" stroke={ink} stroke-width="4" stroke-linecap="round" />
+      <text x="72" y="30" fill={ink} font-family="Public Sans Variable, system-ui, sans-serif" font-size="26" font-weight="600">Port of</text>
+      <text x="72" y="60" fill={ink} font-family="Public Sans Variable, system-ui, sans-serif" font-size="31" font-weight="700">Centralia</text>
+    </svg>
+  )
+}

@@ -1,0 +1,72 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { contact } from '../data/site';
+import { webpSrcset, type ImageKey } from '../data/images';
+
+interface Props {
+  title: string;
+  description: string;
+  /** Above-the-fold image to preload (the LCP element). */
+  preloadImage?: ImageKey;
+}
+
+const { title, description, preloadImage } = Astro.props;
+const preloadSrcset = preloadImage && webpSrcset(preloadImage);
+const canonical = new URL(Astro.url.pathname, Astro.site);
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'GovernmentOrganization',
+  name: 'Port of Centralia',
+  url: 'https://portofcentralia.com',
+  telephone: '+1-360-736-3527',
+  faxNumber: '+1-360-330-5666',
+  email: contact.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: contact.street,
+    addressLocality: contact.city,
+    addressRegion: contact.region,
+    postalCode: contact.postalCode,
+    addressCountry: 'US',
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '08:00',
+    closes: '17:00',
+  },
+  sameAs: ['https://www.facebook.com/portofcentralia', 'https://www.youtube.com/@portofcentralia'],
+};
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <!-- Concept demo: keep it out of search results. -->
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {preloadSrcset && <link rel="preload" as="image" type="image/webp" imagesrcset={preloadSrcset} imagesizes="(min-width: 1000px) 50vw, 100vw" fetchpriority="high" />}
+    <meta name="theme-color" content="#06203b" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+  </head>
+  <body>
+    <Header />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

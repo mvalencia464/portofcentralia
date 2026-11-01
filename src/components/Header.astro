@@ -1,0 +1,131 @@
+---
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { nav, OFFICIAL_SITE } from '../data/site';
+---
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+
+
+<header class="site-header">
+  <div class="demo-banner" role="note">
+    <strong>Concept demo by Stoke Leads.</strong> This is not the official Port of Centralia website. Visit{' '}
+    <a href={OFFICIAL_SITE}>portofcentralia.com</a> for current information.
+  </div>
+  <div class="utility on-dark">
+    <div class="container utility__inner">
+      <form class="search" role="search" action="/search" method="get">
+        <label for="site-search" class="sr-only">Search the Port website</label>
+        <input id="site-search" name="q" type="search" placeholder="Search the Port" autocomplete="off" />
+        <button type="submit">
+          <Icon name="search" />
+          <span class="sr-only">Search</span>
+        </button>
+      </form>
+      <a class="btn btn--primary btn--small" href="/meetings">
+        <Icon name="calendar" />
+        Meetings &amp; Agendas
+      </a>
+    </div>
+  </div>
+
+  <div class="mainbar">
+    <div class="container mainbar__inner">
+      <a class="brand" href="/">
+        <Logo />
+        <span class="sr-only">, home</span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+        <Icon name="menu" />
+        Menu
+      </button>
+
+      <nav class="nav" id="primary-nav" aria-label="Main">
+        <ul class="nav__list">
+          {
+            nav.map((entry, i) =>
+              'items' in entry && entry.items ? (
+                <li class="nav__item">
+                  <button class="nav__disclosure" type="button" aria-expanded="false" aria-controls={`subnav-${i}`}>
+                    {entry.label}
+                    <Icon name="chevron" />
+                  </button>
+                  <ul class="nav__sub" id={`subnav-${i}`} hidden>
+                    {entry.items.map((item) => (
+                      <li>
+                        <a href={item.href}>{item.label}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ) : (
+                <li class="nav__item">
+                  <a class="nav__link" href={entry.href}>
+                    {entry.label}
+                  </a>
+                </li>
+              ),
+            )
+          }
+        </ul>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Disclosure navigation (not an ARIA menu): buttons toggle aria-expanded and
+  // the hidden attribute. Escape closes and returns focus; nothing traps focus.
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const toggle = header?.querySelector<HTMLButtonElement>('.menu-toggle');
+  const navEl = header?.querySelector<HTMLElement>('#primary-nav');
+  const disclosures = [...(header?.querySelectorAll<HTMLButtonElement>('.nav__disclosure') ?? [])];
+
+  const setSub = (btn: HTMLButtonElement, open: boolean) => {
+    btn.setAttribute('aria-expanded', String(open));
+    const sub = document.getElementById(btn.getAttribute('aria-controls')!);
+    if (sub) sub.hidden = !open;
+  };
+  const closeSubs = (except?: HTMLButtonElement) => disclosures.forEach((b) => b !== except && setSub(b, false));
+  const setMenu = (open: boolean) => {
+    if (!toggle || !navEl) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    navEl.toggleAttribute('data-open', open);
+  };
+
+  disclosures.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      closeSubs(btn);
+      setSub(btn, open);
+    });
+  });
+
+  toggle?.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const openBtn = disclosures.find((b) => b.getAttribute('aria-expanded') === 'true');
+    if (openBtn) {
+      setSub(openBtn, false);
+      openBtn.focus();
+    } else if (toggle?.getAttribute('aria-expanded') === 'true') {
+      setMenu(false);
+      toggle.focus();
+    }
+  });
+
+  // Close an open submenu when focus or a click moves outside it.
+  document.addEventListener('click', (e) => {
+    if (!(e.target as Element).closest('.nav__item')) closeSubs();
+  });
+  header?.addEventListener('focusout', (e) => {
+    const next = e.relatedTarget as Element | null;
+    disclosures.forEach((btn) => {
+      const item = btn.closest('.nav__item');
+      if (next && item && !item.contains(next)) setSub(btn, false);
+    });
+  });
+</script>

@@ -1,0 +1,126 @@
+---
+import { images, imageSrc, webpSrcset, type ImageKey } from '../data/images';
+
+interface Props {
+  image: ImageKey;
+  sizes?: string;
+  priority?: boolean;
+}
+
+const { image, sizes = '100vw', priority = false } = Astro.props;
+const meta = images[image];
+const src = imageSrc(image);
+const srcset = webpSrcset(image);
+const uid = `ph-${image}-${Math.random().toString(36).slice(2, 7)}`;
+const scene = image === 'rail' ? 'rail' : image === 'community' ? 'community' : image === 'park2' ? 'lots' : 'parks';
+---
+
+{
+  src ? (
+    <>
+      <picture>
+        {srcset && <source type="image/webp" srcset={srcset} sizes={sizes} />}
+        <img
+          src={src}
+          alt={meta.alt}
+          width={meta.width}
+          height={meta.height}
+          sizes={sizes}
+          loading={priority ? 'eager' : 'lazy'}
+          fetchpriority={priority ? 'high' : 'auto'}
+          decoding={priority ? 'sync' : 'async'}
+        />
+      </picture>
+      {'stock' in meta && <span class="stock-tag">Representative photo</span>}
+    </>
+  ) : (
+    <>
+      {/* Illustrated stand-in until the real photo is uploaded to R2. */}
+      <svg
+        viewBox="0 0 1600 900"
+        preserveAspectRatio="xMidYMid slice"
+        xmlns="http://www.w3.org/2000/svg"
+        role={meta.alt ? 'img' : undefined}
+        aria-label={meta.alt ? `Placeholder for photo: ${meta.alt}` : undefined}
+        aria-hidden={meta.alt ? undefined : 'true'}
+      >
+        <defs>
+          <linearGradient id={`${uid}-sky`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#8fb6d3" />
+            <stop offset="1" stop-color="#dfeaf2" />
+          </linearGradient>
+          <linearGradient id={`${uid}-ground`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#5f8a55" />
+            <stop offset="1" stop-color="#3d6b3f" />
+          </linearGradient>
+        </defs>
+        <rect width="1600" height="900" fill={`url(#${uid}-sky)`} />
+        <path d="M980 330 1120 215l40 22 50-40 70 52 190 95z" fill="#eef3f7" />
+        <path d="M1120 215l40 22 50-40 70 52-60-6-45 20-30-18-60 25z" fill="#fff" />
+        <path d="M0 360c180-40 340-20 520-45s360 10 560-15 340 5 520 0v140H0z" fill="#3f6b4a" opacity=".55" />
+        <path d="M0 400c140-30 300-35 460-20s300-25 470-10 360 10 670-15v545H0z" fill={`url(#${uid}-ground)`} />
+        <path d="M0 400c60-14 90-40 120-12s70-30 110-4 80-24 120 2 90-28 140 0 80-20 120 4V470H0z" fill="#24492f" />
+        <path d="M1150 395c50-20 80 8 120-10s70 12 120-6 80 14 210-6v80h-450z" fill="#24492f" />
+        {
+          scene === 'parks' && (
+            <g>
+              <path d="M1180 900 1420 420h70L1480 900z" fill="#7d858d" />
+              <path d="M1452 440 1446 900" stroke="#f4f4f4" stroke-width="5" stroke-dasharray="26 22" />
+              <g fill="#e9edf1" stroke="#b8c2cc" stroke-width="3">
+                <rect x="260" y="520" width="330" height="120" />
+                <rect x="640" y="500" width="260" height="105" />
+                <rect x="320" y="690" width="420" height="130" />
+                <rect x="820" y="660" width="250" height="110" />
+                <rect x="960" y="520" width="170" height="80" />
+              </g>
+              <g fill="#c9d1d9">
+                <rect x="260" y="640" width="330" height="22" />
+                <rect x="320" y="820" width="420" height="22" />
+              </g>
+            </g>
+          )
+        }
+        {
+          scene === 'lots' && (
+            <g>
+              <path d="M1180 900 1420 420h70L1480 900z" fill="#7d858d" />
+              <g fill="#c7a679" opacity=".9">
+                <path d="M180 560h360l-40 160H120z" />
+                <path d="M600 540h330l20 150H580z" />
+                <path d="M240 760h520l-20 120H200z" />
+              </g>
+              <g fill="#e9edf1" stroke="#b8c2cc" stroke-width="3">
+                <rect x="960" y="560" width="200" height="90" />
+                <rect x="860" y="720" width="240" height="110" />
+              </g>
+            </g>
+          )
+        }
+        {
+          scene === 'rail' && (
+            <g>
+              <path d="M520 900 780 420h40l260 480z" fill="#6f6a63" />
+              <g stroke="#3a332b" stroke-width="10">
+                <path d="M640 900 795 420M960 900 805 420" />
+              </g>
+              <g stroke="#8a7a66" stroke-width="12">
+                <path d="M570 860h420M610 780h340M650 700h260M690 620h180M730 540h100" />
+              </g>
+              <rect x="700" y="300" width="200" height="190" rx="16" fill="#c2410c" />
+              <rect x="725" y="325" width="150" height="60" rx="6" fill="#1f2a37" />
+              <rect x="700" y="420" width="200" height="22" fill="#f59a23" />
+            </g>
+          )
+        }
+        {
+          scene === 'community' && (
+            <g fill="#24492f">
+              <path d="M80 900V640l50-150 50 150v260zM220 900V600l60-180 60 180v300zM1320 900V620l55-170 55 170v280zM1460 900V660l45-140 45 140v240z" />
+            </g>
+          )
+        }
+      </svg>
+      <span class="photo-label" aria-hidden="true">{meta.label}</span>
+    </>
+  )
+}
