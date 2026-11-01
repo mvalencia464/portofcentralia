@@ -1,0 +1,95 @@
+---
+import Base from '../../../layouts/Base.astro';
+import home from '../../../../audit/2026-10-31/portofcentralia-home.report.json';
+import agendas from '../../../../audit/2026-10-31/portofcentralia-agendas.report.json';
+
+// Every number on this page is read from the saved Lighthouse reports, so the
+// page can't drift from the evidence it links to.
+type Report = typeof home;
+const count = (r: Report, id: string) => (r.audits as Record<string, { details?: { items?: unknown[] } }>)[id]?.details?.items?.length ?? 0;
+const score = (r: Report, id: keyof Report['categories']) => Math.round((r.categories[id].score ?? 0) * 100);
+
+const reports = [
+  { title: 'Homepage', url: 'https://portofcentralia.com/', file: 'portofcentralia-home.report.html', r: home },
+  {
+    title: 'Meeting agendas & minutes',
+    url: 'https://portofcentralia.com/documents-center/meeting-agendas-and-minutes/',
+    file: 'portofcentralia-agendas.report.html',
+    r: agendas as Report,
+  },
+];
+---
+
+<Base
+  title="Audit evidence, October 31, 2026 | Port of Centralia concept"
+  description="Lighthouse reports and a PDF structure check of portofcentralia.com, behind the findings in the readiness plan."
+>
+  <div class="page-head on-dark">
+    <div class="container">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <ol>
+          <li><a href="/readiness-plan">Readiness plan</a></li>
+          <li><span aria-current="page">Audit evidence</span></li>
+        </ol>
+      </nav>
+      <h1>Audit evidence</h1>
+      <p>The measurements behind the readiness plan, taken on October 31, 2026. Open any report to check a number.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="container">
+      <h2>Lighthouse reports</h2>
+      <p>Lighthouse 12, mobile settings. Each report opens as a full, interactive page.</p>
+      <table class="checklist audit-table">
+        <caption class="sr-only">Lighthouse results for portofcentralia.com</caption>
+        <thead>
+          <tr>
+            <th scope="col">Page audited</th>
+            <th scope="col">Accessibility</th>
+            <th scope="col">Contrast failures</th>
+            <th scope="col">Unlabeled buttons / links</th>
+            <th scope="col">Load time (LCP)</th>
+            <th scope="col">Report</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            reports.map(({ title, url, file, r }) => (
+              <tr>
+                <th scope="row">
+                  {title}
+                  <span class="checklist__ref">{url.replace('https://', '')}</span>
+                </th>
+                <td data-label="Accessibility">{score(r, 'accessibility')} / 100</td>
+                <td data-label="Contrast failures">{count(r, 'color-contrast')}</td>
+                <td data-label="Unlabeled buttons / links">
+                  {count(r, 'button-name')} / {count(r, 'link-name')}
+                </td>
+                <td data-label="Load time (LCP)">{r.audits['largest-contentful-paint'].displayValue}</td>
+                <td data-label="Report">
+                  <a href={`/audit/2026-10-31/${file}`} aria-label={`Full Lighthouse report: ${title}`}>Open report</a>
+                </td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+
+      <h2>PDF structure check</h2>
+      <p>
+        Posted agenda, minutes, bond overview and roster PDFs, checked for a tag tree and embedded text. Scanned PDFs
+        have no text a screen reader can read.
+      </p>
+      <p><a href="/audit/2026-10-31/pdf-structure.txt">Open the PDF structure check (text file)</a></p>
+
+      <h2>Notes</h2>
+      <ul class="audit-notes">
+        <li>Accessibility counts came out identical across repeat runs. Load times vary slightly from run to run.</li>
+        <li>Each finding is a snapshot of the live site on the date above and will change as the site is updated.</li>
+        <li>The raw JSON for each report is kept in the project repository.</li>
+      </ul>
+      <p><a class="text-link" href="/readiness-plan">Back to the readiness plan</a></p>
+    </div>
+  </div>
+</Base>

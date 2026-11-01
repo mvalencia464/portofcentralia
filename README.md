@@ -68,8 +68,9 @@ Links to pages outside the demo (About, Industrial Parks, News, and so on) go to
 
 ## Audit evidence
 
-The readiness plan's numbers about the current site come from Lighthouse 12 (mobile) runs on Oct 31, 2026. The HTML
-reports and a PDF structure check are published at `/audit/2026-10-31/`; the raw JSON is in `audit/2026-10-31/`.
+The readiness plan's numbers about the current site come from Lighthouse 12 (mobile) runs on Oct 31, 2026. An index page,
+the HTML reports and a PDF structure check are published at `/audit/2026-10-31/` (the index reads its numbers
+straight from the saved reports); the raw JSON is in `audit/2026-10-31/`.
 Accessibility counts reproduce exactly between runs; load times vary by about a tenth of a second.
 
 ## Accessibility and performance (Oct 31, 2026)
